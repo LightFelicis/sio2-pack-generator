@@ -1,21 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Minimal example</title>
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Minimal example</title>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" rel="stylesheet">
+    <link href="static/css/index.css" rel="stylesheet"/>
 </head>
 <body>
-  <div id="task-content"><p>Minimal example of the editor.</p></div>
-  <img src="static/cat.jpg"/>
-  <script>
-    $(document).ready(function() {
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="accordion accordion-flush first-top-element" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button aria-controls="flush-collapseOne" aria-expanded="false"
+                                class="accordion-button collapsed"
+                                data-bs-target="#flush-collapseOne" data-bs-toggle="collapse" type="button">
+                            1. Task statement
+                        </button>
+                    </h2>
+                    <div aria-labelledby="flush-headingOne" class="accordion-collapse collapse"
+                         data-bs-parent="#accordionFlushExample"
+                         id="flush-collapseOne">
+                        <div class="accordion-body">
+                            <div class="col align-self-center">
+                                <div id="task-content">
+                                    <p>
+                                        Write the task statement here :-)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingTwo">
+                        <button aria-controls="flush-collapseTwo" aria-expanded="false"
+                                class="accordion-button collapsed"
+                                data-bs-target="#flush-collapseTwo" data-bs-toggle="collapse" type="button">
+                            2. Create a sample test
+                        </button>
+                    </h2>
+                    <div aria-labelledby="flush-headingTwo" class="accordion-collapse collapse"
+                         data-bs-parent="#accordionFlushExample"
+                         id="flush-collapseTwo">
+                        <div class="accordion-body">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <textarea class="form-control " name="input" placeholder="Input"
+                                          style="width:50%"></textarea>
+                                <textarea class="form-control " name="output" placeholder="Output"
+                                          style="width:50%"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingThree">
+                        <button aria-controls="flush-collapseThree" aria-expanded="false"
+                                class="accordion-button collapsed"
+                                data-bs-target="#flush-collapseThree" data-bs-toggle="collapse" type="button">
+                            c:
+                        </button>
+                    </h2>
+                    <div aria-labelledby="flush-headingThree" class="accordion-collapse collapse"
+                         data-bs-parent="#accordionFlushExample"
+                         id="flush-collapseThree">
+                        <div class="accordion-body">
+                            <div class="col-4">
+                                <img class="img-thumbnail" src="static/cat.jpg"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card first-top-element">
+                <div class="card-body ">
+                    This is some text within a card body.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script defer src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+<script>
+    $(document).ready(function () {
         $('#task-content').summernote();
     });
-  </script>
-</body>
+</script>
+
 </html>

@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "bootstrap": "^5.0.0-beta1",
+    "node-sass": "^5.0.0"
+  },
+  "name": "sio2-pack-generator",
+  "scripts": {
+    "scss": "node-sass --watch templates/scss -o static/css"
+  }
+}
