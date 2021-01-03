@@ -1,0 +1,8 @@
+ID=tag_placeholder
+SIG=$(ID)
+
+TIMELIMIT = 1
+SLOW_TIMELIMIT = 4
+MEMLIMIT = 65536
+
+OI_TIME = oiejq.sh

@@ -3,10 +3,7 @@
 use std::collections::HashMap;
 use rocket_contrib::templates::Template;
 use rocket_contrib::serve::StaticFiles;
-use rocket::Response;
-use rocket::request::Form;
 use rocket_contrib::json::Json;
-use serde::{Serialize, Deserialize};
 
 mod package_creator;
 use package_creator::{create, Task};
@@ -19,7 +16,7 @@ fn index() -> Template {
 
 #[post("/task", format = "application/json", data="<task>")]
 fn create_task(task: Json<Task>) -> () {
-    create(task);
+    let r = create(task).unwrap();
 }
 
 fn main() {

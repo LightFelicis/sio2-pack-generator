@@ -20,12 +20,38 @@
                         <button aria-controls="flush-collapseOne" aria-expanded="false"
                                 class="accordion-button collapsed"
                                 data-bs-target="#flush-collapseOne" data-bs-toggle="collapse" type="button">
-                            1. Task statement
+                            1. Task title and tag
                         </button>
                     </h2>
                     <div aria-labelledby="flush-headingOne" class="accordion-collapse collapse"
                          data-bs-parent="#accordionFlushExample"
                          id="flush-collapseOne">
+                        <div class="accordion-body">
+                            <div class="col align-self-center">
+                                <div id="task-tag-and-title">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <textarea class="form-control " name="input" placeholder="Task tag"
+                                                  style="width:50%"></textarea>
+                                        <textarea class="form-control " name="output" placeholder="Task title"
+                                                  style="width:50%"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingTwo">
+                        <button aria-controls="flush-collapseTwo" aria-expanded="false"
+                                class="accordion-button collapsed"
+                                data-bs-target="#flush-collapseTwo" data-bs-toggle="collapse" type="button">
+                            2. Task statement
+                        </button>
+                    </h2>
+                    <div aria-labelledby="flush-headingTwo" class="accordion-collapse collapse"
+                         data-bs-parent="#accordionFlushExample"
+                         id="flush-collapseTwo">
                         <div class="accordion-body">
                             <div class="col align-self-center">
                                 <div id="task-content">
@@ -38,16 +64,16 @@
                     </div>
                 </div>
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="flush-headingTwo">
-                        <button aria-controls="flush-collapseTwo" aria-expanded="false"
+                    <h2 class="accordion-header" id="flush-headingThree">
+                        <button aria-controls="flush-collapseThree" aria-expanded="false"
                                 class="accordion-button collapsed"
-                                data-bs-target="#flush-collapseTwo" data-bs-toggle="collapse" type="button">
-                            2. Create a sample test
+                                data-bs-target="#flush-collapseThree" data-bs-toggle="collapse" type="button">
+                            3. Create a sample test
                         </button>
                     </h2>
-                    <div aria-labelledby="flush-headingTwo" class="accordion-collapse collapse"
+                    <div aria-labelledby="flush-headingThree" class="accordion-collapse collapse"
                          data-bs-parent="#accordionFlushExample"
-                         id="flush-collapseTwo">
+                         id="flush-collapseThree">
                         <div class="accordion-body">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -59,17 +85,18 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="flush-headingThree">
-                        <button aria-controls="flush-collapseThree" aria-expanded="false"
+                    <h2 class="accordion-header" id="flush-headingFour">
+                        <button aria-controls="flush-collapseFour" aria-expanded="false"
                                 class="accordion-button collapsed"
-                                data-bs-target="#flush-collapseThree" data-bs-toggle="collapse" type="button">
-                            c:
+                                data-bs-target="#flush-collapseFour" data-bs-toggle="collapse" type="button">
+                            4. Add more tests!
                         </button>
                     </h2>
-                    <div aria-labelledby="flush-headingThree" class="accordion-collapse collapse"
+                    <div aria-labelledby="flush-headingFour" class="accordion-collapse collapse"
                          data-bs-parent="#accordionFlushExample"
-                         id="flush-collapseThree">
+                         id="flush-collapseFour">
                         <div class="accordion-body">
                             <div class="col-4">
                                 <img class="img-thumbnail" src="static/cat.jpg"/>
