@@ -37,7 +37,7 @@ pub fn create(task : Json<Task>) -> zip::result::ZipResult<()> {
     prepare_directories(&tmp_dir, &task)?;
     prepare_tests(&tmp_dir, &task)?;
     let res = zip_package(tmp_dir.path().to_str().unwrap(),
-                          &*format!("/tmp/{}.zip", task.tag.as_str()));
+                          &format!("/tmp/{}.zip", task.tag.as_str()));
     eprintln!("Finished zip_package result.err() = {:?}", res.err());
     Ok(())
 }
@@ -47,27 +47,27 @@ fn prepare_directories(tmp_dir_path : &TempDir, task : &Json<Task>) -> io::Resul
     create_dir(tmp_dir_path.path().join("in"))?;
     create_dir(tmp_dir_path.path().join("out"))?;
     create_dir(tmp_dir_path.path().join("prog"))?;
-    prepare_makefile(tmp_dir_path, &*task.tag)?;
-    prepare_config(tmp_dir_path, task)?;
+    prepare_makefile(tmp_dir_path.path(), &task.tag)?;
+    prepare_config(tmp_dir_path.path(), task)?;
     Ok(())
 }
 
-fn prepare_makefile(tmp_dir_path : &TempDir, task_tag : &str) -> io::Result<()> {
-    let makefile_in_path = tmp_dir_path.path().join("makefile.in");
+fn prepare_makefile(tmp_dir_path : &Path, task_tag : &str) -> io::Result<()> {
+    let makefile_in_path = tmp_dir_path.join("makefile.in");
     std::fs::write(makefile_in_path.as_path(),
                    std::fs::read_to_string("./resources/makefile.in.example")
                        .unwrap()
                        .replace("tag_placeholder", task_tag))
 }
 
-fn prepare_config(tmp_dir_path : &TempDir, task : &Json<Task>) -> io::Result<()> {
-    let config_path = tmp_dir_path.path().join("config.yml");
-    println!("config_path = {}", config_path.as_path().to_str().unwrap());
+fn prepare_config(tmp_dir_path : &Path, task : &Json<Task>) -> io::Result<()> {
+    let config_path = tmp_dir_path.join("config.yml");
+    println!("config_path = {:?}", config_path);
     let tests_config = prepare_tests_config(task.tests.len() as i64);
     std::fs::write(config_path.as_path(),
                    std::fs::read_to_string("./resources/config.yml.example")
                        .unwrap()
-                       .replace("task_title_placeholder", &*task.title)
+                       .replace("task_title_placeholder", &task.title)
                        .add(&*tests_config))
 }
 
@@ -76,18 +76,18 @@ fn prepare_tests_config(tests_num : i64) -> String {
     let normalized_tests = tests_num / 100;
     let last_test_points = 100 - ((tests_num - 1) * normalized_tests);
     for i in 1..tests_num {
-        res = res.add(&*format!("{}: {}\n", i, normalized_tests));
+        res += &format!("{}: {}\n", i, normalized_tests);
     }
-    res = res.add(&*format!("{}: {}\n", tests_num, last_test_points));
+    res += &format!("{}: {}\n", tests_num, last_test_points);
     res
 }
 
 fn prepare_tests(tmp_dir_path : &TempDir, task : &Json<Task>) -> io::Result<()> {
     create_test(tmp_dir_path, 0,
-                &*task.exemplary_test.input, &*task.exemplary_test.output,&*task.tag)?;
-    for i in 1..task.tests.len() + 1 {
-        create_test(tmp_dir_path, i as i32,
-                    &*task.tests[i - 1].input, &*task.tests[i - 1].output, &*task.tag)?;
+                &task.exemplary_test.input, &task.exemplary_test.output,&task.tag)?;
+    for (i, test) in task.tests.iter().enumerate() {
+        create_test(tmp_dir_path, (i + 1) as i32,
+                    &test.input, &test.output, &task.tag)?;
     }
     Ok(())
 }
@@ -147,12 +147,12 @@ fn zip_dir<T>(
 }
 
 fn zip_package(src_dir : &str, dst_dir : &str) -> zip::result::ZipResult<()> {
-    println!("src_dir = {}", src_dir);
+    eprintln!("src_dir = {}", src_dir);
     if !Path::new(src_dir).is_dir() {
         return Err(ZipError::FileNotFound);
     }
     let path = Path::new(dst_dir);
-    println!("dst_dir = {}", path.to_str().unwrap());
+    eprintln!("dst_dir = {:?}", path);
     let file = File::create(&path).unwrap();
     let walkdir = WalkDir::new(src_dir.to_string());
     let it = walkdir.into_iter();
