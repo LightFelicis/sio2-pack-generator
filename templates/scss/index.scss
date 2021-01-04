@@ -1,9 +1,16 @@
 // Your variable overrides
 $body-bg: #ffffff;
 $body-color: #000000;
+$primary: #73b0d4;
+
 
 .first-top-element {
   margin-top: 20px;
 }
+
+.button-submit {
+  margin-top: 20px;
+}
+
 // Bootstrap and its default variables
 @import "../../node_modules/bootstrap/scss/bootstrap";
