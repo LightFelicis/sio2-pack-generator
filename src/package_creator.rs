@@ -79,7 +79,7 @@ fn prepare_config(tmp_dir_path: &Path, task: &Json<Task>) -> io::Result<()> {
 
 fn prepare_tests_config(tests_num: i64) -> String {
     let mut res: String = String::from("");
-    let normalized_tests = tests_num / 100;
+    let normalized_tests = 100 / tests_num;
     let last_test_points = 100 - ((tests_num - 1) * normalized_tests);
     for i in 1..tests_num {
         res += &format!("{}: {}\n", i, normalized_tests);
@@ -189,4 +189,16 @@ fn zip_package(src_dir: &str, dst_dir: &str) -> zip::result::ZipResult<()> {
         Some(zip::CompressionMethod::Bzip2).unwrap(),
     )?;
     Ok(())
+}
+
+#[test]
+fn tests_points_splitting_is_fair() {
+    let points = prepare_tests_config(2);
+    assert_eq!(points, "1: 50\n2: 50\n");
+}
+
+#[test]
+fn tests_points_splitting_is_fair_not_divisible() {
+    let points = prepare_tests_config(3);
+    assert_eq!(points, "1: 33\n2: 33\n3: 34\n");
 }
