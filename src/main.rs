@@ -8,10 +8,13 @@ use std::collections::HashMap;
 
 mod package_creator;
 use package_creator::{create, Task};
+use tera::Context;
+
 
 #[get("/")]
 fn index() -> Template {
-    let context: HashMap<&str, &str> = HashMap::new();
+    let mut context = Context::new();
+    context.add("testArray", &[1,2,3,4]);
     Template::render("index", &context)
 }
 
@@ -22,8 +25,8 @@ fn create_task(task: Json<Task>) -> () {
 
 fn main() {
     rocket::ignite()
+        .attach(Template::fairing())
         .mount("/", routes![index, create_task])
         .mount("/static", StaticFiles::from("static"))
-        .attach(Template::fairing())
         .launch();
 }

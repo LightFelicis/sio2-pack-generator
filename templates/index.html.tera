@@ -10,7 +10,9 @@
     <link href="static/css/index.css" rel="stylesheet"/>
 </head>
 <body>
-
+<div>
+    {{ __tera_context }}
+</div>
 <div class="container">
     <div class="row">
         <div class="col">
@@ -98,9 +100,19 @@
                          data-bs-parent="#accordionFlushExample"
                          id="flush-collapseFour">
                         <div class="accordion-body">
-                            <div class="col-4">
-                                <img class="img-thumbnail" src="static/cat.jpg"/>
-                            </div>
+                            {% for test in [1,2,3,] %}
+                                <div class="input-group" id="test-{{test}}">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    <textarea class="form-control " name="input" placeholder="Input"
+                                              style="width:40%"></textarea>
+                                    <textarea class="form-control " name="output" placeholder="Output"
+                                              style="width:40%"></textarea>
+                                    <button type="button" class="close" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                            <button type="button" class="btn btn-primary" style="width: 100%">Add more</button>
                         </div>
                     </div>
                 </div>
