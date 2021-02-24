@@ -8,11 +8,9 @@
     <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" rel="stylesheet">
     <link href="static/css/index.css" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
-<div>
-    {{ __tera_context }}
-</div>
 <div class="container">
     <div class="row">
         <div class="col">
@@ -99,20 +97,23 @@
                     <div aria-labelledby="flush-headingFour" class="accordion-collapse collapse"
                          data-bs-parent="#accordionFlushExample"
                          id="flush-collapseFour">
-                        <div class="accordion-body">
-                            {% for test in [1,2,3,] %}
-                                <div class="input-group" id="test-{{test}}">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <div class="accordion-body" id="accordion-tests">
+                            <div id="tests-inputs">
+                                {% for test in [1, 2, 3, 4] %}
+                                <div class="input-group" style="width: 100%">
                                     <textarea class="form-control " name="input" placeholder="Input"
                                               style="width:40%"></textarea>
                                     <textarea class="form-control " name="output" placeholder="Output"
                                               style="width:40%"></textarea>
-                                    <button type="button" class="close" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+                                    <button type="button" class="btn btn-default remove-single-test" aria-label="Left Align">
+                                        <span class="fa fa-trash-o fa-lg" aria-hidden="true"></span>
                                     </button>
                                 </div>
-                            {% endfor %}
-                            <button type="button" class="btn btn-primary" style="width: 100%">Add more</button>
+                                {% endfor %}
+                            </div>
+                            <button type="button" class="btn btn-default" id="add-more-tests" aria-label="Add more tests.">
+                                <span class="fa fa-plus fa-lg" aria-hidden="true"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -124,7 +125,7 @@
                     Click to expand!
                 </div>
             </div>
-            <input class="btn btn-primary button-submit" type="submit" value="Submit" style="width: 100%">
+            <input class="btn btn-primary button-submit" style="width: 100%" type="submit" value="Submit">
         </div>
     </div>
 </div>

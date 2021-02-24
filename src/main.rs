@@ -9,13 +9,13 @@ use std::collections::HashMap;
 mod package_creator;
 use package_creator::{create, Task};
 use tera::Context;
+use serde::Serialize;
 
 
 #[get("/")]
 fn index() -> Template {
     let mut context = Context::new();
-    context.add("testArray", &[1,2,3,4]);
-    Template::render("index", &context)
+    Template::render("index", context.into_json())
 }
 
 #[post("/task", format = "application/json", data = "<task>")]

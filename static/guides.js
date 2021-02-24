@@ -5,6 +5,9 @@ const desc = {
     "correctness-tests" : "These tests won't be visible for your students. They will be used for grading their solutions, so it's good idea to put some edge cases here. In our example, possible edge case could be a number corresponding to first and last letter in alphabet."
 }
 
+var testNum = 4;
+const testNumMax = 8;
+
 $(document).ready(function () {
     $('#task-content').summernote();
 
@@ -34,5 +37,29 @@ $(document).ready(function () {
             '<div class="card-body"> ' +
             desc["correctness-tests"] +
             ' </div>');
+    });
+
+    $(document).on('click', '#add-more-tests', function () {
+        $('#tests-inputs').append(
+            '<div class="input-group">\
+                    <textarea class="form-control" name="input" placeholder="Input" style="width:40%"></textarea>\
+                    <textarea class="form-control" name="output" placeholder="Output" style="width:40%"></textarea>\
+                    <button type="button" class="btn btn-default remove-single-test" aria-label="Left Align">\
+                        <span class="fa fa-trash-o fa-lg" aria-hidden="true"></span>\
+                    </button>\
+            </div>'
+        );
+        testNum++;
+        if (testNum >= testNumMax) {
+            $("#add-more-tests").attr("disabled", true);
+        }
+    });
+
+    $(document).on('click', '.remove-single-test', function () {
+        $(this).parent().remove();
+        testNum--;
+        if (testNum < testNumMax) {
+            $("#add-more-tests").attr("disabled", false);
+        }
     });
 });
