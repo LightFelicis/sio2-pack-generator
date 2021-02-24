@@ -62,4 +62,46 @@ $(document).ready(function () {
             $("#add-more-tests").attr("disabled", false);
         }
     });
+
+    $(document).on('click', '.button-submit', function () {
+        const tag = $('#task-tag').val();
+        const title = $('#task-title').val();
+        const task_statement = $("#task-content").summernote('code');
+        const example_in = $('#example-input').val();
+        const example_out = $('#example-output').val();
+        let tests = [];
+        $('#tests-inputs').children('.input-group').each(function() {
+            const input = $(this).children('.input').val();
+            const output = $(this).children('.output').val();
+            tests.push({'input': input, 'output': output});
+        });
+        const post_data = JSON.stringify({
+            'tag': tag,
+            'title': title,
+            'task_statement': task_statement,
+            'exemplary_test': {'input': example_in, 'output': example_out},
+            'tests': tests
+        })
+        console.log(post_data);
+
+        fetch('/task', {
+            credentials: "same-origin",
+            mode: "same-origin",
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            body: post_data
+        }).then(response => response.blob())
+            .then(zipFile => {
+                console.log(zipFile)
+                let blob = zipFile;
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'download'
+                link.click();
+            })
+            .catch((error) => {
+                console.log("Error: ", error)
+            })
+
+    })
 });

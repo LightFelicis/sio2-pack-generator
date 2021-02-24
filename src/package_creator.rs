@@ -1,5 +1,5 @@
 extern crate tempdir;
-use std::io::{self, BufReader};
+use std::io::{self};
 use tempdir::TempDir;
 
 use std::io::prelude::*;
@@ -8,12 +8,12 @@ use std::iter::Iterator;
 use zip::result::ZipError;
 use zip::write::FileOptions;
 
-use std::fs::{copy, create_dir, File};
+use std::fs::{create_dir, File};
 use std::path::Path;
 use walkdir::{DirEntry, WalkDir};
 
 use rocket_contrib::json::Json;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize};
 use std::ops::Add;
 
 #[derive(Deserialize)]
@@ -32,16 +32,17 @@ pub struct Task {
 }
 
 // Given task data from form, creates package
-pub fn create(task: Json<Task>) -> zip::result::ZipResult<()> {
+pub fn create(task: Json<Task>) -> zip::result::ZipResult<String> {
     let tmp_dir = TempDir::new(task.tag.as_str())?;
+    let dir_path = tmp_dir.path().to_str().unwrap();
     prepare_directories(&tmp_dir, &task)?;
     prepare_tests(&tmp_dir, &task)?;
     let res = zip_package(
         tmp_dir.path().to_str().unwrap(),
-        &format!("/tmp/{}.zip", task.tag.as_str()),
+        &format!("./{}.zip", task.tag.as_str()),
     );
     eprintln!("Finished zip_package result.err() = {:?}", res.err());
-    Ok(())
+    Ok(format!("./{}.zip", task.tag.as_str()))
 }
 
 fn prepare_directories(tmp_dir_path: &TempDir, task: &Json<Task>) -> io::Result<()> {
@@ -66,7 +67,7 @@ fn prepare_makefile(tmp_dir_path: &Path, task_tag: &str) -> io::Result<()> {
 
 fn prepare_config(tmp_dir_path: &Path, task: &Json<Task>) -> io::Result<()> {
     let config_path = tmp_dir_path.join("config.yml");
-    println!("config_path = {:?}", config_path);
+    eprintln!("config_path = {:?}", config_path);
     let tests_config = prepare_tests_config(task.tests.len() as i64);
     std::fs::write(
         config_path.as_path(),
@@ -152,7 +153,7 @@ where
         // Write file or directory explicitly
         // Some unzip tools unzip files with directory paths correctly, some do not!
         if path.is_file() {
-            println!("adding file {:?} as {:?} ...", path, name);
+            eprintln!("adding file {:?} as {:?} ...", path, name);
             #[allow(deprecated)]
             zip.start_file_from_path(name, options)?;
             let mut f = File::open(path)?;
@@ -163,7 +164,7 @@ where
         } else if name.as_os_str().len() != 0 {
             // Only if not root! Avoids path spec / warning
             // and mapname conversion failed error on unzip
-            println!("adding dir {:?} as {:?} ...", path, name);
+            eprintln!("adding dir {:?} as {:?} ...", path, name);
             #[allow(deprecated)]
             zip.add_directory_from_path(name, options)?;
         }

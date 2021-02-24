@@ -1,26 +1,31 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 #[macro_use]
 extern crate rocket;
+use rocket::response::NamedFile;
 use rocket_contrib::json::Json;
 use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::Template;
-use std::collections::HashMap;
+use std::fs;
 
 mod package_creator;
 use package_creator::{create, Task};
 use tera::Context;
-use serde::Serialize;
+use anyhow;
 
 
 #[get("/")]
 fn index() -> Template {
-    let mut context = Context::new();
+    let context = Context::new();
     Template::render("index", context.into_json())
 }
 
 #[post("/task", format = "application/json", data = "<task>")]
-fn create_task(task: Json<Task>) -> () {
-    let r = create(task).unwrap();
+fn create_task(task: Json<Task>) -> Result<NamedFile, anyhow::Error> {
+    let r = create(task)?;
+    eprintln!("{:?}", r);
+    let file = NamedFile::open(r.as_str())?;
+    fs::remove_file( r.as_str())?;
+    Ok(file)
 }
 
 fn main() {

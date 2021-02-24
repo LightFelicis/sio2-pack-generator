@@ -31,10 +31,10 @@
                                 <div id="task-tag-and-title">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <textarea class="form-control " name="input" placeholder="Task tag"
-                                                  style="width:50%"></textarea>
-                                        <textarea class="form-control " name="output" placeholder="Task title"
-                                                  style="width:50%"></textarea>
+                                        <textarea class="form-control " name="input" placeholder="Task title"
+                                                  style="width:50%" id="task-title"></textarea>
+                                        <textarea class="form-control " name="output" placeholder="Task tag"
+                                                  style="width:50%" id="task-tag"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -78,9 +78,9 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <textarea class="form-control " name="input" placeholder="Input"
-                                          style="width:50%"></textarea>
+                                          style="width:50%" id="example-input"></textarea>
                                 <textarea class="form-control " name="output" placeholder="Output"
-                                          style="width:50%"></textarea>
+                                          style="width:50%" id="example-output"></textarea>
                             </div>
                         </div>
                     </div>
@@ -101,9 +101,9 @@
                             <div id="tests-inputs">
                                 {% for test in [1, 2, 3, 4] %}
                                 <div class="input-group" style="width: 100%">
-                                    <textarea class="form-control " name="input" placeholder="Input"
+                                    <textarea class="form-control input" name="input" placeholder="Input"
                                               style="width:40%"></textarea>
-                                    <textarea class="form-control " name="output" placeholder="Output"
+                                    <textarea class="form-control output" name="output" placeholder="Output"
                                               style="width:40%"></textarea>
                                     <button type="button" class="btn btn-default remove-single-test" aria-label="Left Align">
                                         <span class="fa fa-trash-o fa-lg" aria-hidden="true"></span>
