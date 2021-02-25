@@ -206,7 +206,7 @@ fn zip_package(src_dir: &str, dst_dir: &str) -> zip::result::ZipResult<()> {
         &mut it.filter_map(|e| e.ok()),
         src_dir,
         file,
-        Some(zip::CompressionMethod::Bzip2).unwrap(),
+        Some(zip::CompressionMethod::Deflated).unwrap(),
     )?;
     Ok(())
 }
