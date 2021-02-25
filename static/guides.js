@@ -42,8 +42,8 @@ $(document).ready(function () {
     $(document).on('click', '#add-more-tests', function () {
         $('#tests-inputs').append(
             '<div class="input-group">\
-                    <textarea class="form-control" name="input" placeholder="Input" style="width:40%"></textarea>\
-                    <textarea class="form-control" name="output" placeholder="Output" style="width:40%"></textarea>\
+                    <textarea class="form-control input" name="input" placeholder="Input" style="width:40%"></textarea>\
+                    <textarea class="form-control output" name="output" placeholder="Output" style="width:40%"></textarea>\
                     <button type="button" class="btn btn-default remove-single-test" aria-label="Left Align">\
                         <span class="fa fa-trash-o fa-lg" aria-hidden="true"></span>\
                     </button>\
@@ -82,7 +82,7 @@ $(document).ready(function () {
             'exemplary_test': {'input': example_in, 'output': example_out},
             'tests': tests
         })
-        console.log(post_data);
+        console.log(post_data)
 
         fetch('/task', {
             credentials: "same-origin",

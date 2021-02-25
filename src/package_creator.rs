@@ -5,10 +5,10 @@ use tempdir::TempDir;
 use std::io::prelude::*;
 use std::io::{Seek, Write};
 use std::iter::Iterator;
-use zip::result::ZipError;
+use zip::result::{ZipError, ZipResult};
 use zip::write::FileOptions;
 
-use std::fs::{create_dir, File};
+use std::fs::{create_dir, remove_dir_all, File};
 use std::path::Path;
 use walkdir::{DirEntry, WalkDir};
 
@@ -37,6 +37,7 @@ pub fn create(task: Json<Task>) -> zip::result::ZipResult<String> {
     let dir_path = tmp_dir.path().to_str().unwrap();
     prepare_directories(&tmp_dir, &task)?;
     prepare_tests(&tmp_dir, &task)?;
+    prepare_doc(&tmp_dir.path(), &task)?;
     let res = zip_package(
         tmp_dir.path().to_str().unwrap(),
         &format!("./{}.zip", task.tag.as_str()),
@@ -47,12 +48,30 @@ pub fn create(task: Json<Task>) -> zip::result::ZipResult<String> {
 
 fn prepare_directories(tmp_dir_path: &TempDir, task: &Json<Task>) -> io::Result<()> {
     create_dir(tmp_dir_path.path().join("doc"))?;
+    create_dir(tmp_dir_path.path().join("doc").join(format!("{}zad.html", task.tag.as_str())))?;
     create_dir(tmp_dir_path.path().join("in"))?;
     create_dir(tmp_dir_path.path().join("out"))?;
     create_dir(tmp_dir_path.path().join("prog"))?;
     prepare_makefile(tmp_dir_path.path(), &task.tag)?;
     prepare_config(tmp_dir_path.path(), task)?;
     Ok(())
+}
+
+fn prepare_doc(tmp_dir_path: &Path, task: &Json<Task>) -> ZipResult<()> {
+    let doc_dir_path = tmp_dir_path.join("doc")
+        .join(format!("{}zad.html", task.tag.as_str()));
+    let doc_dir_path_str = doc_dir_path.to_str().unwrap();
+    println!("Doc dir path = {:?}", doc_dir_path_str);
+    let doc_path = doc_dir_path.join("index.html");
+    println!("Piszę do {:?} zawartość: {:?}", doc_path.as_path(), task.task_statement.as_str());
+    std::fs::write(doc_path.as_path(), task.task_statement.as_str());
+    println!("{}", &*format!("{}.zip", doc_dir_path_str));
+    let res = zip_package(
+        doc_dir_path_str,
+        &*format!("{}.zip", doc_dir_path_str));
+    std::fs::remove_dir_all(doc_dir_path_str)?;
+    res
+
 }
 
 fn prepare_makefile(tmp_dir_path: &Path, task_tag: &str) -> io::Result<()> {
@@ -127,8 +146,8 @@ fn create_test(
     Ok(())
 }
 
-#[cfg(feature = "bzip2")]
-const METHOD_BZIP2: Option<zip::CompressionMethod> = Some(zip::CompressionMethod::Bzip2);
+#[cfg(feature = "deflate")]
+const METHOD_DEFLATED: Option<zip::CompressionMethod> = Some(zip::CompressionMethod::Deflated);
 
 // From https://github.com/zip-rs/zip/blob/master/examples/write_dir.rs
 fn zip_dir<T>(
