@@ -34,10 +34,12 @@ pub struct Task {
 // Given task data from form, creates package
 pub fn create(task: Json<Task>) -> zip::result::ZipResult<String> {
     let tmp_dir = TempDir::new(task.tag.as_str())?;
-    let dir_path = tmp_dir.path().to_str().unwrap();
-    prepare_directories(&tmp_dir, &task)?;
-    prepare_tests(&tmp_dir, &task)?;
-    prepare_doc(&tmp_dir.path(), &task)?;
+    let package_dir = tmp_dir.path().join(task.tag.as_str());
+    create_dir(package_dir.as_path());
+    let dir_path = package_dir.to_str().unwrap();
+    prepare_directories(package_dir.as_path(), &task)?;
+    prepare_tests(package_dir.as_path(), &task)?;
+    prepare_doc(package_dir.as_path(), &task)?;
     let res = zip_package(
         tmp_dir.path().to_str().unwrap(),
         &format!("./{}.zip", task.tag.as_str()),
@@ -46,14 +48,14 @@ pub fn create(task: Json<Task>) -> zip::result::ZipResult<String> {
     Ok(format!("./{}.zip", task.tag.as_str()))
 }
 
-fn prepare_directories(tmp_dir_path: &TempDir, task: &Json<Task>) -> io::Result<()> {
-    create_dir(tmp_dir_path.path().join("doc"))?;
-    create_dir(tmp_dir_path.path().join("doc").join(format!("{}zad.html", task.tag.as_str())))?;
-    create_dir(tmp_dir_path.path().join("in"))?;
-    create_dir(tmp_dir_path.path().join("out"))?;
-    create_dir(tmp_dir_path.path().join("prog"))?;
-    prepare_makefile(tmp_dir_path.path(), &task.tag)?;
-    prepare_config(tmp_dir_path.path(), task)?;
+fn prepare_directories(tmp_dir_path: &Path, task: &Json<Task>) -> io::Result<()> {
+    create_dir(tmp_dir_path.join("doc"))?;
+    create_dir(tmp_dir_path.join("doc").join(format!("{}zad.html", task.tag.as_str())))?;
+    create_dir(tmp_dir_path.join("in"))?;
+    create_dir(tmp_dir_path.join("out"))?;
+    create_dir(tmp_dir_path.join("prog"))?;
+    prepare_makefile(tmp_dir_path, &task.tag)?;
+    prepare_config(tmp_dir_path, task)?;
     Ok(())
 }
 
@@ -64,7 +66,7 @@ fn prepare_doc(tmp_dir_path: &Path, task: &Json<Task>) -> ZipResult<()> {
     println!("Doc dir path = {:?}", doc_dir_path_str);
     let doc_path = doc_dir_path.join("index.html");
     std::fs::write(doc_path.as_path(),
-                   format!("<h1> {} </h1> <br> {} <br> <h6> input </h6> <br> {} <br> <h6> output </h6> <br> {}",
+                   format!("<h1> {} </h1> <br> {} <br> <h4> input </h4> <br> {} <br> <h4> output </h4> <br> {}",
                            task.title.as_str(),
                            task.task_statement.as_str(),
                            task.exemplary_test.input.as_str(),
@@ -110,7 +112,7 @@ fn prepare_tests_config(tests_num: i64) -> String {
     res
 }
 
-fn prepare_tests(tmp_dir_path: &TempDir, task: &Json<Task>) -> io::Result<()> {
+fn prepare_tests(tmp_dir_path: &Path, task: &Json<Task>) -> io::Result<()> {
     create_test(
         tmp_dir_path,
         0,
@@ -131,17 +133,15 @@ fn prepare_tests(tmp_dir_path: &TempDir, task: &Json<Task>) -> io::Result<()> {
 }
 
 fn create_test(
-    tmp_dir_path: &TempDir,
+    tmp_dir_path: &Path,
     task_num: i32,
     input: &str,
     output: &str,
     task_tag: &str,
 ) -> io::Result<()> {
     let in_path = tmp_dir_path
-        .path()
         .join(format!("in/{}{}.in", task_tag, task_num));
     let out_path = tmp_dir_path
-        .path()
         .join(format!("out/{}{}.out", task_tag, task_num));
     std::fs::write(in_path.as_path(), input)?;
     std::fs::write(out_path.as_path(), output)?;
