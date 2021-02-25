@@ -63,15 +63,17 @@ fn prepare_doc(tmp_dir_path: &Path, task: &Json<Task>) -> ZipResult<()> {
     let doc_dir_path_str = doc_dir_path.to_str().unwrap();
     println!("Doc dir path = {:?}", doc_dir_path_str);
     let doc_path = doc_dir_path.join("index.html");
-    println!("Piszę do {:?} zawartość: {:?}", doc_path.as_path(), task.task_statement.as_str());
-    std::fs::write(doc_path.as_path(), task.task_statement.as_str());
-    println!("{}", &*format!("{}.zip", doc_dir_path_str));
+    std::fs::write(doc_path.as_path(),
+                   format!("<h1> {} </h1> <br> {} <br> <h6> input </h6> <br> {} <br> <h6> output </h6> <br> {}",
+                           task.title.as_str(),
+                           task.task_statement.as_str(),
+                           task.exemplary_test.input.as_str(),
+                           task.exemplary_test.output.as_str()));
     let res = zip_package(
         doc_dir_path_str,
         &*format!("{}.zip", doc_dir_path_str));
     std::fs::remove_dir_all(doc_dir_path_str)?;
     res
-
 }
 
 fn prepare_makefile(tmp_dir_path: &Path, task_tag: &str) -> io::Result<()> {
