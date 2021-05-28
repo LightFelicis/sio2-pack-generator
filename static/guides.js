@@ -8,8 +8,64 @@ const desc = {
 var testNum = 4;
 const testNumMax = 8;
 
+var queue_has_unstarted_mathjax_job = false;
+
 $(document).ready(function () {
-    $('#task-content').summernote();
+
+    // Not sure why such method call is necessary, but it seems it is.
+    // Note that it specifies inline math delimiters, but displayed equations
+    // with $$...$$ and \[...\] also do work (although sometime markdown treats
+    // '\' specially so the second form is actually \\[...\\] to escape the escaping).
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [["\\(","\\)"]]}
+    });
+
+    var simplemde = new SimpleMDE({
+        element: $("#task-content")[0],
+        // Spell checker works for english only, better to disable it.
+        spellChecker: false,
+        placeholder: "Write your task statement here :-)",
+        previewRender: function(plainText, preview) {
+
+            // MathJax can be ordered to parse any DOM element that changed and has new math elements.
+            // This has visual effect of math equations turning from plain text to parsed formulas.
+            // As previewRender is called every time any change happens in editor buffer ordering MathJax
+            // to parse math in preview causes constant effect of math repeatedly turning into plain text
+            // and back to math formula form when typing text in editor with opened preview.
+            // To fix this there is special new element on website with "mathjax-buffer" id and display set
+            // to none. MathJax is ordered to parse math here and when it finishes the preview is being changed
+            // to already parsed content.
+            var mathjax_buffer = $("#mathjax-buffer")[0];
+
+            // As MathJax is asynchronous and we need to do several synchronous tasks MathJax.Hub.Queue is used.
+            // Elements added to this queue are callbacks, MathJax guarantees synchronous execution of elements
+            // in this queue.
+            // queue_has_unstarted_mathjax_job keeps whether there is a full unstarted job on MathJax queue so to
+            // avoid adding too many jobs which slows the processing down drastically as previewRender is called
+            // so many times that previous job to make preview might not have started yet.
+            if (!queue_has_unstarted_mathjax_job) {
+                queue_has_unstarted_mathjax_job = true;
+
+                var that = this;
+                MathJax.Hub.Queue(function() {
+                    queue_has_unstarted_mathjax_job = false;
+                    // that.parent is used because it happens to be SimpleMDE instance
+                    // https://github.com/sparksuite/simplemde-markdown-editor/blob/6abda7ab68cc20f4aca870eb243747951b90ab04/src/js/simplemde.js#L1270
+                    mathjax_buffer.innerHTML = that.parent.markdown(that.parent.value());
+                });
+
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, "mathjax-buffer"]);
+
+                MathJax.Hub.Queue(function() {
+                    preview.innerHTML = mathjax_buffer.innerHTML;
+                    mathjax_buffer.innerHtml = "";
+                });
+            }
+            // Return current preview value as new preview value (so it doesn't change the preview).
+            // When jobs on queue will end they will change the preview to the new one.
+            return preview.innerHTML;
+        },
+    });
 
     $('#flush-collapseOne').on('show.bs.collapse', function () {
         $('.card-body').replaceWith(
@@ -66,7 +122,7 @@ $(document).ready(function () {
     $(document).on('click', '.button-submit', function () {
         const tag = $('#task-tag').val();
         const title = $('#task-title').val();
-        const task_statement = $("#task-content").summernote('code');
+        const task_statement = simplemde.markdown(simplemde.value());
         const example_in = $('#example-input').val();
         const example_out = $('#example-output').val();
         let tests = [];
