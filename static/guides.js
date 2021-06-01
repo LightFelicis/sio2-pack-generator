@@ -1,15 +1,86 @@
+const task_statement_description = ["<p>Here you can design a task statement, please provide also a brief description on how the input and output is formatted. For example, an input can be a single number and output can be corresponding letter in English alphabet.</p>",
+"<p>Task title and example test description will be added automatically to the package.</p>",
+"<p>The editor uses easy to learn markdown markup.</p>",
+"<p>Use <strong title=\"Toggle Side by Side (F9)\" tabindex=\"-1\" class=\"fa fa-columns no-disable no-mobile active\" style=\"display: inline\"></strong> from toolbar to enter fullscreen view with preview of how the statement will look like for participants shown on the right.</p>",
+"<p>Use <strong title=\"Markdown Guide\" tabindex=\"-1\" class=\"fa fa-question-circle\" href=\"https://simplemde.com/markdown-guide\" target=\"_blank\"></strong> from toolbar to access markdown cheat sheet.</p>",
+"<p>Apart from standard markdown elements your task statement can include mathematical expressions (\\(\\LaTeX\\) syntax).</p>",
+"<p>For example:</p>",
+"<p>\\\\<i></i>(x\\\\) in task statement will turn into \\(x\\)</p>",
+"<p>\\\\<i></i>(a + 2 \\cdot 7 = 3\\\\) in the task statement will turn into \\(a + 2 \\cdot 7 = 3\\)</p>",
+"<p>\\\\<i></i>(b\\_{i + 2} \\cdot 12 + 7 = 3^{2+i}\\\\) in the task statement will turn into \\(b_{i + 2} \\cdot 12 + 7 = 3^{2+i}\\)</p>",
+"<p><strong>Note:</strong> unlike in \\(\\LaTeX\\) you need to prepend _ with \\ because _ has special meaning in markdown.</p>",
+"<p>\\\\<i></i>(\\frac{2}{3}\\\\) in the task statement will turn into \\(\\frac{2}{3}\\)</p>",
+"<p>\\\\<i></i>(1 \\leq n &lt; m \\leq 10^9\\\\) in the task statement will turn into \\(1 \\leq n &lt; m \\leq 10^9\\)</p>",
+"<p>You may also use $<i></i>$...$<i></i>$ or \\\\[...\\\\] delimiters instead of \\\\<i></i>(...\\\\) to make your equations appear on separate lines.</p>"].join('');
+
 const desc = {
     "tag-and-title": "First, design a title and a tag -- short version of title, 3-4 characters. For example title \"Bytesaurus adventures\" is a great title, and \"adv\" can be its corresponding tag.",
-    "task-statement" : "Here you can design a task statement, please provide also a brief description on how the input and output is formatted. For example, an input can be a single number and output can be corresponding letter in english alphabet.",
+    "task-statement" : task_statement_description,
     "sample-test" : "This test will be appended to task statement for students -- it will be presented as an example. It's crucial that example fits to input description. Corresponding input for previous examplanary task statement could be 3, and corresponding output could be c.",
     "correctness-tests" : "These tests won't be visible for your students. They will be used for grading their solutions, so it's good idea to put some edge cases here. In our example, possible edge case could be a number corresponding to first and last letter in alphabet."
-}
+};
 
 var testNum = 4;
 const testNumMax = 8;
 
+var queue_has_unstarted_mathjax_job = false;
+
 $(document).ready(function () {
-    $('#task-content').summernote();
+
+    // Not sure why such method call is necessary, but it seems it is.
+    // Note that it specifies inline math delimiters, but displayed equations
+    // with $$...$$ and \[...\] also do work (although sometime markdown treats
+    // '\' specially so the second form is actually \\[...\\] to escape the escaping).
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [["\\(","\\)"]]}
+    });
+
+    var simplemde = new SimpleMDE({
+        element: $("#task-content")[0],
+        // Spell checker works for english only, better to disable it.
+        spellChecker: false,
+        placeholder: "Write your task statement here using markdown markup language :-)",
+        previewRender: function(plainText, preview) {
+
+            // MathJax can be ordered to parse any DOM element that changed and has new math elements.
+            // This has visual effect of math equations turning from plain text to parsed formulas.
+            // As previewRender is called every time any change happens in editor buffer ordering MathJax
+            // to parse math in preview causes constant effect of math repeatedly turning into plain text
+            // and back to math formula form when typing text in editor with opened preview.
+            // To fix this there is special new element on website with "mathjax-buffer" id and display set
+            // to none. MathJax is ordered to parse math here and when it finishes the preview is being changed
+            // to already parsed content.
+            var mathjax_buffer = $("#mathjax-buffer")[0];
+
+            // As MathJax is asynchronous and we need to do several synchronous tasks MathJax.Hub.Queue is used.
+            // Elements added to this queue are callbacks, MathJax guarantees synchronous execution of elements
+            // in this queue.
+            // queue_has_unstarted_mathjax_job keeps whether there is a full unstarted job on MathJax queue so to
+            // avoid adding too many jobs which slows the processing down drastically as previewRender is called
+            // so many times that previous job to make preview might not have started yet.
+            if (!queue_has_unstarted_mathjax_job) {
+                queue_has_unstarted_mathjax_job = true;
+
+                var that = this;
+                MathJax.Hub.Queue(function() {
+                    queue_has_unstarted_mathjax_job = false;
+                    // that.parent is used because it happens to be SimpleMDE instance
+                    // https://github.com/sparksuite/simplemde-markdown-editor/blob/6abda7ab68cc20f4aca870eb243747951b90ab04/src/js/simplemde.js#L1270
+                    mathjax_buffer.innerHTML = that.parent.markdown(that.parent.value());
+                });
+
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, "mathjax-buffer"]);
+
+                MathJax.Hub.Queue(function() {
+                    preview.innerHTML = mathjax_buffer.innerHTML;
+                    mathjax_buffer.innerHtml = "";
+                });
+            }
+            // Return current preview value as new preview value (so it doesn't change the preview).
+            // When jobs on queue will end they will change the preview to the new one.
+            return preview.innerHTML;
+        },
+    });
 
     $('#flush-collapseOne').on('show.bs.collapse', function () {
         $('.card-body').replaceWith(
@@ -23,6 +94,7 @@ $(document).ready(function () {
             '<div class="card-body"> ' +
             desc["task-statement"] +
             ' </div>');
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, "card-body"]);
     });
 
     $('#flush-collapseThree').on('show.bs.collapse', function () {
@@ -66,7 +138,7 @@ $(document).ready(function () {
     $(document).on('click', '.button-submit', function () {
         const tag = $('#task-tag').val();
         const title = $('#task-title').val();
-        const task_statement = $("#task-content").summernote('code');
+        const task_statement = simplemde.markdown(simplemde.value());
         const example_in = $('#example-input').val();
         const example_out = $('#example-output').val();
         let tests = [];
