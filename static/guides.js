@@ -168,7 +168,7 @@ $(document).ready(function () {
                 let blob = zipFile;
                 let link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
-                link.download = tag;
+                link.download = tag + '.zip';
                 link.click();
             })
             .catch((error) => {
