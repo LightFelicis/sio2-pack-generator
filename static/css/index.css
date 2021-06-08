@@ -4,6 +4,15 @@
 .button-submit {
   margin-top: 20px; }
 
+.CodeMirror {
+    height: 300px;
+}
+
+.card-body {
+    overflow-y: auto;
+    max-height: 550px;
+}
+
 /*!
  * Bootstrap v5.0.1 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors
