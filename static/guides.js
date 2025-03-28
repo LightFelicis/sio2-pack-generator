@@ -1,25 +1,25 @@
-const task_statement_description = ["<p>Here you can design a task statement, please provide also a brief description on how the input and output is formatted. For example, an input can be a single number and output can be corresponding letter in English alphabet.</p>",
-"<p>Task title and example test description will be added automatically to the package.</p>",
-"<p>The editor uses easy to learn markdown markup.</p>",
-"<p>Use <strong title=\"Toggle Side by Side (F9)\" tabindex=\"-1\" class=\"fa fa-columns no-disable no-mobile active\" style=\"display: inline\"></strong> from toolbar to enter fullscreen view with preview of how the statement will look like for participants shown on the right.</p>",
-"<p>Use <strong title=\"Markdown Guide\" tabindex=\"-1\" class=\"fa fa-question-circle\" href=\"https://simplemde.com/markdown-guide\" target=\"_blank\"></strong> from toolbar to access markdown cheat sheet.</p>",
-"<p>Apart from standard markdown elements your task statement can include mathematical expressions (\\(\\LaTeX\\) syntax).</p>",
-"<p>For example:</p>",
-"<p>\\\\<i></i>(x\\\\) in task statement will turn into \\(x\\)</p>",
-"<p>\\\\<i></i>(a + 2 \\cdot 7 = 3\\\\) in the task statement will turn into \\(a + 2 \\cdot 7 = 3\\)</p>",
-"<p>\\\\<i></i>(b\\_{i + 2} \\cdot 12 + 7 = 3^{2+i}\\\\) in the task statement will turn into \\(b_{i + 2} \\cdot 12 + 7 = 3^{2+i}\\)</p>",
-"<p><strong>Note:</strong> unlike in \\(\\LaTeX\\) you need to prepend _ with \\ because _ has special meaning in markdown.</p>",
-"<p>\\\\<i></i>(\\frac{2}{3}\\\\) in the task statement will turn into \\(\\frac{2}{3}\\)</p>",
-"<p>\\\\<i></i>(1 \\leq n &lt; m \\leq 10^9\\\\) in the task statement will turn into \\(1 \\leq n &lt; m \\leq 10^9\\)</p>",
-"<p>You may also use $<i></i>$...$<i></i>$ or \\\\[...\\\\] delimiters instead of \\\\<i></i>(...\\\\) to make your equations appear on separate lines.</p>"].join('');
-
+const task_statement_description = ["<p>Tutaj możesz zaprojektować treść zadania. Prosimy również o krótkie wyjaśnienie, jak sformatowane są dane wejściowe i wyjściowe. Na przykład, dane wejściowe mogą być pojedynczą liczbą, a dane wyjściowe odpowiadającą jej literą w alfabecie angielskim.</p>",
+    "<p>Tytuł zadania oraz opis przykładowych testów zostaną automatycznie dodane do pakietu.</p>",
+    "<p>Edytor używa łatwego do nauczenia się języka znaczników markdown.</p>",
+    "<p>Użyj <strong title=\"Przełącz widok obok siebie (F9)\" tabindex=\"-1\" class=\"fa fa-columns no-disable no-mobile active\" style=\"display: inline\"></strong> na pasku narzędzi, aby przejść do widoku pełnoekranowego z podglądem, jak treść zadania będzie wyglądać dla uczestników (wyświetlonym po prawej stronie).</p>",
+    "<p>Użyj <strong title=\"Przewodnik po Markdown\" tabindex=\"-1\" class=\"fa fa-question-circle\" href=\"https://simplemde.com/markdown-guide\" target=\"_blank\"></strong> na pasku narzędzi, aby uzyskać dostęp do ściągawki z Markdown.</p>",
+    "<p>Oprócz standardowych elementów markdown, treść zadania może zawierać wyrażenia matematyczne zapisane w składni \\(\\LaTeX\\).</p>",
+    "<p>Na przykład:</p>",
+    "<p>\\\\<i></i>(x\\\\) w treści zadania zostanie przekształcone w \\(x\\)</p>",
+    "<p>\\\\<i></i>(a + 2 \\cdot 7 = 3\\\\) w treści zadania zostanie przekształcone w \\(a + 2 \\cdot 7 = 3\\)</p>",
+    "<p>\\\\<i></i>(b\\_{i + 2} \\cdot 12 + 7 = 3^{2+i}\\\\) w treści zadania zostanie przekształcone w \\(b_{i + 2} \\cdot 12 + 7 = 3^{2+i}\\)</p>",
+    "<p><strong>Uwaga:</strong> w przeciwieństwie do \\(\\LaTeX\\), w Markdown musisz poprzedzić znak _ ukośnikiem (\\), ponieważ _ ma specjalne znaczenie.</p>",
+    "<p>\\\\<i></i>(\\frac{2}{3}\\\\) w treści zadania zostanie przekształcone w \\(\\frac{2}{3}\\)</p>",
+    "<p>\\\\<i></i>(1 \\leq n &lt; m \\leq 10^9\\\\) w treści zadania zostanie przekształcone w \\(1 \\leq n &lt; m \\leq 10^9\\)</p>",
+    "<p>Możesz także używać znaczników $<i></i>$...$<i></i>$ lub \\\\[...\\\\] zamiast \\\\<i></i>(...\\\\), aby Twoje równania były wyświetlane w osobnych liniach.</p>"].join('');
+    
 const desc = {
-    "tag-and-title": "First, design a title and a tag -- short version of title, 3-4 characters. For example title \"Bytesaurus adventures\" is a great title, and \"adv\" can be its corresponding tag.",
+    "tag-and-title": "Najpierw zaprojektuj tytuł i tag – krótką wersję tytułu, składającą się z 3-4 znaków. Na przykład, tytuł „Przygody Bajtosaurusa” to świetny tytuł, a „prz” może być jego odpowiadającym tagiem.",
     "task-statement" : task_statement_description,
-    "sample-test" : "This test will be appended to task statement for students -- it will be presented as an example. It's crucial that example fits to input description. Corresponding input for previous examplanary task statement could be 3, and corresponding output could be c.",
-    "correctness-tests" : "These tests won't be visible for your students. They will be used for grading their solutions, so it's good idea to put some edge cases here. In our example, possible edge case could be a number corresponding to first and last letter in alphabet."
+    "sample-test" : "Ten test zostanie dołączony do treści zadania dla uczniów – będzie przedstawiony jako przykład. Kluczowe jest, aby przykład pasował do opisu danych wejściowych. Odpowiadające dane wejściowe dla poprzedniego przykładowego zadania mogłyby wynosić 3, a odpowiadające dane wyjściowe to litera 'c'.",
+    "correctness-tests" : "Te testy nie będą widoczne dla uczniów. Zostaną użyte do oceniania ich rozwiązań, więc warto tutaj umieścić przypadki brzegowe. W naszym przykładzie przypadkiem brzegowym może być liczba odpowiadająca pierwszej i ostatniej literze alfabetu."
 };
-
+    
 var testNum = 4;
 const testNumMax = 8;
 
@@ -39,7 +39,7 @@ $(document).ready(function () {
         element: $("#task-content")[0],
         // Spell checker works for english only, better to disable it.
         spellChecker: false,
-        placeholder: "Write your task statement here using markdown markup language :-)",
+        placeholder: "Napisz treść swojego zadania korzystając z markdown-a :-)",
         previewRender: function(plainText, preview) {
 
             // MathJax can be ordered to parse any DOM element that changed and has new math elements.

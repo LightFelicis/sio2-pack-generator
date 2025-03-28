@@ -66,7 +66,7 @@ fn prepare_doc(tmp_dir_path: &Path, task: &Json<Task>) -> ZipResult<()> {
     println!("Doc dir path = {:?}", doc_dir_path_str);
     let doc_path = doc_dir_path.join("index.html");
     std::fs::write(doc_path.as_path(),
-                   format!("<h1> {} </h1> <br> {} <br> <h4> input </h4> <br> {} <br> <h4> output </h4> <br> {}",
+                   format!("<h1> {} </h1> <br> {} <br> <table> <tr> <th> Wejście </th> <th> Wyjście </th> </tr> <tr> <th> {} </th> <th> {} </th> </tr> </table>",
                            task.title.as_str(),
                            task.task_statement.as_str(),
                            task.exemplary_test.input.as_str(),

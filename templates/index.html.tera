@@ -20,7 +20,7 @@
                         <button aria-controls="flush-collapseOne" aria-expanded="false"
                                 class="accordion-button collapsed"
                                 data-bs-target="#flush-collapseOne" data-bs-toggle="collapse" type="button">
-                            1. Task title and tag
+                            1. Tytuł i identyfikator zadania
                         </button>
                     </h2>
                     <div aria-labelledby="flush-headingOne" class="accordion-collapse collapse"
@@ -31,9 +31,9 @@
                                 <div id="task-tag-and-title">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <textarea class="form-control " name="input" placeholder="Task title"
+                                        <textarea class="form-control " name="input" placeholder="Tytuł"
                                                   style="width:50%" id="task-title"></textarea>
-                                        <textarea class="form-control " name="output" placeholder="Task tag"
+                                        <textarea class="form-control " name="output" placeholder="Identyfikator (3 znaki)"
                                                   style="width:50%" id="task-tag"></textarea>
                                     </div>
                                 </div>
@@ -46,7 +46,7 @@
                         <button aria-controls="flush-collapseTwo" aria-expanded="false"
                                 class="accordion-button collapsed"
                                 data-bs-target="#flush-collapseTwo" data-bs-toggle="collapse" type="button">
-                            2. Task statement
+                            2. Treść zadania
                         </button>
                     </h2>
                     <div aria-labelledby="flush-headingTwo" class="accordion-collapse collapse"
@@ -65,7 +65,7 @@
                         <button aria-controls="flush-collapseThree" aria-expanded="false"
                                 class="accordion-button collapsed"
                                 data-bs-target="#flush-collapseThree" data-bs-toggle="collapse" type="button">
-                            3. Create a sample test
+                            3. Przygotuj test przykładowy
                         </button>
                     </h2>
                     <div aria-labelledby="flush-headingThree" class="accordion-collapse collapse"
@@ -74,9 +74,9 @@
                         <div class="accordion-body">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                <textarea class="form-control " name="input" placeholder="Input"
+                                <textarea class="form-control " name="input" placeholder="Wejście"
                                           style="width:50%" id="example-input"></textarea>
-                                <textarea class="form-control " name="output" placeholder="Output"
+                                <textarea class="form-control " name="output" placeholder="Wyjście"
                                           style="width:50%" id="example-output"></textarea>
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                         <button aria-controls="flush-collapseFour" aria-expanded="false"
                                 class="accordion-button collapsed"
                                 data-bs-target="#flush-collapseFour" data-bs-toggle="collapse" type="button">
-                            4. Add more tests!
+                            4. Dodaj więcej testów!
                         </button>
                     </h2>
                     <div aria-labelledby="flush-headingFour" class="accordion-collapse collapse"
@@ -98,9 +98,9 @@
                             <div id="tests-inputs">
                                 {% for test in [1, 2, 3, 4] %}
                                 <div class="input-group" style="width: 100%">
-                                    <textarea class="form-control input" name="input" placeholder="Input"
+                                    <textarea class="form-control input" name="input" placeholder="Wejście"
                                               style="width:40%"></textarea>
-                                    <textarea class="form-control output" name="output" placeholder="Output"
+                                    <textarea class="form-control output" name="output" placeholder="Wyjście"
                                               style="width:40%"></textarea>
                                     <button type="button" class="btn btn-default remove-single-test" aria-label="Left Align">
                                         <span class="fa fa-trash-o fa-lg" aria-hidden="true"></span>
@@ -108,7 +108,7 @@
                                 </div>
                                 {% endfor %}
                             </div>
-                            <button type="button" class="btn btn-default" id="add-more-tests" aria-label="Add more tests.">
+                            <button type="button" class="btn btn-default" id="add-more-tests" aria-label="Dodaj więcej testów.">
                                 <span class="fa fa-plus fa-lg" aria-hidden="true"></span>
                             </button>
                         </div>
@@ -119,10 +119,10 @@
         <div class="col-6">
             <div class="card first-top-element">
                 <div class="card-body">
-                    Click to expand!
+                    Kliknij zakładki!
                 </div>
             </div>
-            <input class="btn btn-primary button-submit" style="width: 100%" type="submit" value="Download problem package">
+            <input class="btn btn-primary button-submit" style="width: 100%" type="submit" value="Pobierz paczkę">
         </div>
     </div>
 </div>
